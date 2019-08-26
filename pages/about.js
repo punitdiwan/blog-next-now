@@ -1,10 +1,10 @@
-import Layout from '../components/Layout';
+import Layout from "../components/Layout";
 
 const About = () => (
   <Layout>
     <div>
-      <h1>About BitzPrice</h1>
-      <p>Application to view Bitcoin prices</p>
+      <h1>Changing About Page with testing Summery Plugin for Now.sh</h1>
+      <p>Again Changing the About Page to Test again</p>
     </div>
   </Layout>
 );
