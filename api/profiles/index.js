@@ -2,7 +2,7 @@ const db = require("../../lib/db");
 const escape = require("sql-template-strings");
 
 module.exports = async (req, res) => {
-  const profiles = await db.query(escape`
+  const record = await db.query(escape`
   CREATE TABLE records (
     id int(11) DEFAULT NULL,
     name varchar(20) DEFAULT NULL,
@@ -26,5 +26,5 @@ module.exports = async (req, res) => {
     `);
   const { profilesCount } = count[0];
   const pageCount = Math.ceil(profilesCount / limit);
-  res.status(200).json({ profiles, pageCount, page });
+  res.status(200).json({ profiles, pageCount, page, record });
 };
