@@ -7,14 +7,14 @@ module.exports = async (req, res) => {
   if (page < 1) page = 1;
   const profiles = await db.query(escape`
       SELECT *
-      FROM profiles
+      FROM details
       ORDER BY id
       LIMIT ${(page - 1) * limit}, ${limit}
     `);
   const count = await db.query(escape`
       SELECT COUNT(*)
       AS profilesCount
-      FROM profiles
+      FROM details
     `);
   const { profilesCount } = count[0];
   const pageCount = Math.ceil(profilesCount / limit);
