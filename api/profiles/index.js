@@ -110,8 +110,7 @@ module.exports = async (req, res) => {
     Avtar varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY admins_email_unique (email)
-  );
-  
+  );  
   CREATE TABLE apply_leaves (
     id int(11) NOT NULL,
     employee_id int(11) DEFAULT NULL,
@@ -137,8 +136,7 @@ module.exports = async (req, res) => {
     created_at timestamp NULL DEFAULT NULL,
     updated_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (key)
-  );
-  
+  );  
   CREATE TABLE archived_employee_additional_details (
     id int(11) NOT NULL,
     employee_id int(11) DEFAULT NULL,
@@ -153,21 +151,6 @@ module.exports = async (req, res) => {
     CONSTRAINT fk_employee_id_on_employee_id FOREIGN KEY (employee_id) REFERENCES employees (id)
   );
   `);
-  let page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 9;
-  if (page < 1) page = 1;
-  const profiles = await db.query(escape`
-      SELECT *
-      FROM details
-      ORDER BY id
-      LIMIT ${(page - 1) * limit}, ${limit}
-    `);
-  const count = await db.query(escape`
-      SELECT COUNT(*)
-      AS profilesCount
-      FROM details
-    `);
-  const { profilesCount } = count[0];
-  const pageCount = Math.ceil(profilesCount / limit);
-  res.status(200).json({ profiles, pageCount, page, record });
+
+  res.status(200).json({ record });
 };
