@@ -15,8 +15,7 @@ module.exports = async (req, res) => {
     created_at timestamp NULL DEFAULT NULL,
     updated_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id)
-  );
-  CREATE TABLE additional_exam_groups (
+  ); CREATE TABLE additional_exam_groups (
     id int(11) NOT NULL,
     name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
     batch_id int(11) DEFAULT NULL,
