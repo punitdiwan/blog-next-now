@@ -16,6 +16,9 @@ module.exports = async (req, res) => {
     updated_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id)
   );
+  `);
+
+  const record2 = await db.query(escape`
   CREATE TABLE additional_exam_groups (
     id int(11) NOT NULL,
     name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -30,11 +33,7 @@ module.exports = async (req, res) => {
     PRIMARY KEY (id),
     KEY idx_additional_exam_groups_on_batch_id (batch_id)
     );
-  `);
-
-  const record2 = await db.query(escape`
-
 `);
 
-  res.status(200).json({ record1 });
+  res.status(200).json({ record1, record2 });
 };
