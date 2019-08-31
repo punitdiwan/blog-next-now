@@ -75,5 +75,55 @@ CREATE TABLE additional_exams (
 );
 `);
 
-  res.status(200).json({ record1, record2, record3, record4 });
+  const record5 = await db.query(escape`
+CREATE TABLE additional_field_options (
+  id int(11) NOT NULL,
+  additional_field_id int(11) DEFAULT NULL,
+  field_option varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  school_id int(11) DEFAULT NULL,
+  created_at timestamp NULL DEFAULT NULL,
+  updated_at timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY idx_addional_field_options_on_additional_field_id (additional_field_id),
+  KEY idx_addional_field_options_on_school_id (school_id)
+);
+`);
+
+  const record6 = await db.query(escape`
+CREATE TABLE additional_fields (
+  id int(11) NOT NULL,
+  name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  status tinyint(1) DEFAULT NULL,
+  is_mandatory tinyint(1) DEFAULT '0',
+  input_type varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  priority int(11) DEFAULT NULL,
+  created_at timestamp NULL DEFAULT NULL,
+  updated_at timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+`);
+
+  const record7 = await db.query(escape`
+  CREATE TABLE admins (
+    id int(10) unsigned NOT NULL,
+    name varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    email varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    password varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    job_title varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+    remember_token varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    created_at timestamp NULL DEFAULT NULL,
+    updated_at timestamp NULL DEFAULT NULL,
+    admin int(11) DEFAULT NULL,
+    employee int(11) DEFAULT NULL,
+    first_name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    last_name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    Avtar varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY admins_email_unique (email)
+  );  
+`);
+
+  res
+    .status(200)
+    .json({ record1, record2, record3, record4, record5, record6, record7 });
 };
