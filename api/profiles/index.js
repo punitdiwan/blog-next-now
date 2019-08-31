@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
     created_at timestamp NULL DEFAULT NULL,
     updated_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id),
-    KEY idx_additional_exam_groups_on_batch_id (batch_id),
+    KEY idx_additional_exam_groups_on_batch_id (batch_id)
     );
 `);
 
