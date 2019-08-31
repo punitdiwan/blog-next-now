@@ -1,8 +1,18 @@
-const db = require("../../lib/db");
 const escape = require("sql-template-strings");
-
+const mysql = require("serverless-mysql");
 module.exports = async (req, res) => {
-  const record1 = await db.query(escape`
+  const db = mysql({
+    config: {
+      host: process.env.MYSQL_HOST,
+      database: process.env.MYSQL_DATABASE,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD
+    }
+  });
+  const record1 = await db
+    .transaction()
+    .query(
+      escape`
   CREATE TABLE activity_log (
     id int(10) unsigned NOT NULL,
     log_name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -16,9 +26,10 @@ module.exports = async (req, res) => {
     updated_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id)
   );
-  `);
-
-  const record2 = await db.query(escape`
+  `
+    )
+    .query(
+      escape`
   CREATE TABLE additional_exam_groups (
     id int(11) NOT NULL,
     name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -33,9 +44,10 @@ module.exports = async (req, res) => {
     PRIMARY KEY (id),
     KEY idx_additional_exam_groups_on_batch_id (batch_id)
     );
-`);
-
-  const record3 = await db.query(escape`
+`
+    )
+    .query(
+      escape`
  CREATE TABLE additional_exam_scores (
   id int(11) NOT NULL,
   student_id int(11) DEFAULT NULL,
@@ -51,9 +63,10 @@ module.exports = async (req, res) => {
   KEY idx_additional_exam_score_on_additional_exam_id (additional_exam_id),
   KEY idx_additional_exams_score_on_grading_level_id (grading_level_id)
 );
-`);
-
-  const record4 = await db.query(escape`
+`
+    )
+    .query(
+      escape`
 CREATE TABLE additional_exams (
   id int(11) NOT NULL,
   additional_exam_group_id int(11) DEFAULT NULL,
@@ -73,9 +86,10 @@ CREATE TABLE additional_exams (
   KEY idx_additional_exams_on_grading_level_id (grading_level_id),
   KEY idx_additional_exams_on_event_id (event_id)
 );
-`);
-
-  const record5 = await db.query(escape`
+`
+    )
+    .query(
+      escape`
 CREATE TABLE additional_field_options (
   id int(11) NOT NULL,
   additional_field_id int(11) DEFAULT NULL,
@@ -87,9 +101,10 @@ CREATE TABLE additional_field_options (
   KEY idx_addional_field_options_on_additional_field_id (additional_field_id),
   KEY idx_addional_field_options_on_school_id (school_id)
 );
-`);
-
-  const record6 = await db.query(escape`
+`
+    )
+    .query(
+      escape`
 CREATE TABLE additional_fields (
   id int(11) NOT NULL,
   name varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -101,9 +116,10 @@ CREATE TABLE additional_fields (
   updated_at timestamp NULL DEFAULT NULL,
   PRIMARY KEY (id)
 );
-`);
-
-  const record7 = await db.query(escape`
+`
+    )
+    .query(
+      escape`
   CREATE TABLE admins (
     id int(10) unsigned NOT NULL,
     name varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -121,9 +137,9 @@ CREATE TABLE additional_fields (
     PRIMARY KEY (id),
     UNIQUE KEY admins_email_unique (email)
   );  
-`);
+`
+    )
+    .commit();
 
-  res
-    .status(200)
-    .json({ record1, record2, record3, record4, record5, record6, record7 });
+  res.status(200).json({ record1 });
 };
