@@ -29,8 +29,7 @@ module.exports = async (req, res) => {
     updated_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id),
     KEY idx_additional_exam_groups_on_batch_id (batch_id),
-    CONSTRAINT fk_batch_id_on_batches_id FOREIGN KEY (batch_id) REFERENCES batches (id)
-  )
+    );
   `);
 
   res.status(200).json({ Message: record });
