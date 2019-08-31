@@ -33,5 +33,5 @@ module.exports = async (req, res) => {
   )
   `);
 
-  res.status(200).json({ Message: "record" });
+  res.status(200).json({ Message: record });
 };
