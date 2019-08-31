@@ -35,5 +35,45 @@ module.exports = async (req, res) => {
     );
 `);
 
-  res.status(200).json({ record1, record2 });
+  const record3 = await db.query(escape`
+ CREATE TABLE additional_exam_scores (
+  id int(11) NOT NULL,
+  student_id int(11) DEFAULT NULL,
+  additional_exam_id int(11) DEFAULT NULL,
+  marks decimal(7,2) DEFAULT NULL,
+  grading_level_id int(11) DEFAULT NULL,
+  remarks varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  is_failed tinyint(1) DEFAULT NULL,
+  created_at timestamp NULL DEFAULT NULL,
+  updated_at timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY student_id (student_id,additional_exam_id,grading_level_id),
+  KEY idx_additional_exam_score_on_additional_exam_id (additional_exam_id),
+  KEY idx_additional_exams_score_on_grading_level_id (grading_level_id)
+);
+`);
+
+  const record4 = await db.query(escape`
+CREATE TABLE additional_exams (
+  id int(11) NOT NULL,
+  additional_exam_group_id int(11) DEFAULT NULL,
+  subject_id int(11) DEFAULT NULL,
+  start_time datetime DEFAULT NULL,
+  end_time datetime DEFAULT NULL,
+  maximum_marks int(11) DEFAULT NULL,
+  minimum_marks int(11) DEFAULT NULL,
+  grading_level_id int(11) DEFAULT NULL,
+  weightage int(11) DEFAULT '0',
+  event_id int(11) DEFAULT NULL,
+  created_at timestamp NULL DEFAULT NULL,
+  updated_at timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY additional_exam_group_id (additional_exam_group_id),
+  KEY idx_additional_exams_on_subject_id (subject_id),
+  KEY idx_additional_exams_on_grading_level_id (grading_level_id),
+  KEY idx_additional_exams_on_event_id (event_id)
+);
+`);
+
+  res.status(200).json({ record1, record2, record3, record4 });
 };
